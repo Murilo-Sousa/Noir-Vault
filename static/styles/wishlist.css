@@ -1,0 +1,112 @@
+:root{
+  --card-size: 420px;
+  --gap: 25px;
+  --page-padding: 48px;
+  --last-card-padding: 30px;
+}
+
+*{
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body{
+  height: 100%;
+}
+
+body{
+  margin: 0;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  font-family: playfair display, serif;
+  align-items: flex-start;
+}
+
+.page{
+  width: 100%;
+  align-self: center;
+  padding-top: 48px;
+  padding-bottom: 48px;
+  padding-left: var(--page-padding);
+  padding-right: 0;
+  margin: 0;
+}
+
+.carousel-wrap{
+  width: 100%;
+  overflow: hidden;
+  margin: 0;
+}
+
+.carousel{
+  display: flex;
+  gap: var(--gap);
+  align-items: center;
+  transition: transform 0.35s cubic-bezier(.2,.9,.25,1);
+  padding-bottom: 24px;
+}
+
+.carousel::after{
+  content: "";
+  flex: 0 0 var(--last-card-padding);
+  width: var(--last-card-padding);
+  height: 1px;
+}
+
+.card{
+  flex: 0 0 var(--card-size);
+  height: var(--card-size);
+  background: #dddddd;
+}
+
+.bottom-controls{
+  position: fixed;
+  right: 32px;
+  bottom: 20px;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  pointer-events: auto;
+  background: transparent;
+}
+
+.card button:hover {
+  background-color: green;
+}
+
+.wishlist{
+  font-size: 96px;
+  line-height: 0.85;
+  font-weight: 400;
+  letter-spacing: 4px;
+  margin-left: 4px;
+  color: #050505;
+  user-select: none;
+  white-space: nowrap;
+}
+
+input[type="range"]{
+  -webkit-appearance: none;
+  appearance: none;
+  width: 950px;
+  height: 10px;
+  background: transparent;
+  cursor: pointer;
+}
+
+input[type="range"]::-webkit-slider-runnable-track{
+  height: 10px;
+  border-radius: 100px;
+  background: #e6e6e6;
+}
+
+input[type="range"]::-webkit-slider-thumb{
+  -webkit-appearance: none;
+  height: 10px;
+  width: 50px;
+  border-radius: 100px;
+  background: #a6a6a6;
+  margin-top: 0px;
+}

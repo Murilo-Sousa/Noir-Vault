@@ -1,6 +1,7 @@
-from flask import Flask, request, redirect, session, render_template, g, jsonify
+from flask import Flask, request, redirect, session, render_template, g, jsonify, send_from_directory
 from flask_socketio import SocketIO, emit
 from werkzeug.utils import secure_filename
+from jinja2 import ChoiceLoader, FileSystemLoader
 import sqlite3
 import hashlib
 import os
@@ -10,10 +11,14 @@ import json
 
 
 app = Flask(__name__, template_folder="templates", static_folder="static")
-app.secret_key = "chave_secreta"
+app.secret_key = os.environ.get("SECRET_KEY", "chave_secreta")
+app.jinja_loader = ChoiceLoader([
+    FileSystemLoader(os.path.join(os.path.dirname(__file__), "templates")),
+    FileSystemLoader(os.path.dirname(__file__)),
+])
 socketio = SocketIO(app, cors_allowed_origins="*", async_mode="threading")
 
-UPLOAD_FOLDER = "static/assets"
+UPLOAD_FOLDER = os.path.join("static", "assets")
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 
 
@@ -240,13 +245,53 @@ def init_db():
             "ALTER TABLE produtos ADD COLUMN tamanhos_disponiveis TEXT DEFAULT 'PP,P,M,G,GG'"
         )
 
-    try:
-        cursor.execute("SELECT tamanho_selecionado FROM carrinho LIMIT 1")
-    except sqlite3.OperationalError:
-        cursor.execute("ALTER TABLE carrinho ADD COLUMN tamanho_selecionado TEXT")
+    # Migrações para a tabela carrinho
+    for col_def in [
+        "usuario_id INTEGER",
+        "cliente_id INTEGER",
+        "dados_produto TEXT",
+        "cupom TEXT",
+        "quantidade INTEGER DEFAULT 1",
+        "preco REAL DEFAULT 0",
+        "tamanho_selecionado TEXT",
+    ]:
+        try:
+            cursor.execute(f"ALTER TABLE carrinho ADD COLUMN {col_def}")
+        except sqlite3.OperationalError:
+            pass
+
+    # Garante que a tabela wishlist exista
+    cursor.execute(
+        """
+        CREATE TABLE IF NOT EXISTS wishlist (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            cliente_id INTEGER,
+            produto_id INTEGER,
+            dados_produto TEXT
+        )
+    """
+    )
+
+    # Garante que fotos_produto exista
+    cursor.execute(
+        """
+        CREATE TABLE IF NOT EXISTS fotos_produto (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            produto_id INTEGER,
+            caminho TEXT
+        )
+    """
+    )
+
+    # Sincroniza usuario_id e cliente_id se um deles estiver preenchido e o outro nulo
+    cursor.execute("UPDATE carrinho SET usuario_id = cliente_id WHERE usuario_id IS NULL AND cliente_id IS NOT NULL")
+    cursor.execute("UPDATE carrinho SET cliente_id = usuario_id WHERE cliente_id IS NULL AND usuario_id IS NOT NULL")
 
     conn.commit()
     conn.close()
+
+
+init_db()
 
 
 def hash_senha(senha):
@@ -325,15 +370,17 @@ def adicionar_ao_carrinho(cliente_id, produto):
     cursor = conn.cursor()
 
     dados_json = json.dumps(produto)
-    dados = produto["produto"]
-    tamanho = produto["tamanho"]
+    dados = produto.get("produto", {})
+    tamanho = produto.get("tamanho", "M")
+    produto_id = dados.get("produto_id")
+    preco = dados.get("preco", 0)
 
     cursor.execute(
         """
-        INSERT INTO carrinho (cliente_id, produto_id, dados_produto, tamanho_selecionado)
-        VALUES (?, ?, ?, ?)
+        INSERT INTO carrinho (cliente_id, usuario_id, produto_id, dados_produto, tamanho_selecionado, preco, quantidade)
+        VALUES (?, ?, ?, ?, ?, ?, 1)
     """,
-        (cliente_id, dados["produto_id"], dados_json, tamanho),
+        (cliente_id, cliente_id, produto_id, dados_json, tamanho, preco),
     )
 
     conn.commit()
@@ -345,16 +392,19 @@ def adicionar_a_wishlist(cliente_id, produto):
     cursor = conn.cursor()
 
     dados_json = json.dumps(produto)
-    dados = produto["produto"]
-    id = dados["produto_id"]
-    
-    cursor.execute('''
-                   SELECT * FROM wishlist WHERE produto_id = ?'''
-                   ,(id,))
-    
+    dados = produto.get("produto", {})
+    id = dados.get("produto_id")
+
+    cursor.execute(
+        """
+                   SELECT * FROM wishlist WHERE (cliente_id = ? OR cliente_id IS NULL) AND produto_id = ?""",
+        (cliente_id, id),
+    )
+
     cadastrado = cursor.fetchone()
     if cadastrado:
         print("já cadastrado!")
+        conn.close()
         return
 
     cursor.execute(
@@ -362,7 +412,7 @@ def adicionar_a_wishlist(cliente_id, produto):
         INSERT INTO wishlist (cliente_id, produto_id, dados_produto)
         VALUES (?, ?, ?)
     """,
-        (cliente_id, dados["produto_id"], dados_json),
+        (cliente_id, id, dados_json),
     )
 
     print("dados enviados com sucesso! dados:" + dados_json)
@@ -373,14 +423,16 @@ def adicionar_a_wishlist(cliente_id, produto):
 
 def obter_carrinho():
     user_id = obter_user()
+    if not user_id:
+        return []
 
     conn = get_db()
     cursor = conn.cursor()
 
     cursor.execute(
         """
-                   SELECT * FROM carrinho WHERE cliente_id = ?""",
-        (user_id,),
+                   SELECT * FROM carrinho WHERE cliente_id = ? OR usuario_id = ?""",
+        (user_id, user_id),
     )
 
     colunas = cursor.fetchall()
@@ -391,6 +443,8 @@ def obter_carrinho():
 
 def obter_wishlist():
     user_id = obter_user()
+    if not user_id:
+        return []
 
     conn = get_db()
     cursor = conn.cursor()
@@ -408,10 +462,15 @@ def obter_wishlist():
 
 
 def obter_user():
-    conn = get_db()
-    cursor = conn.cursor()
+    if "usuario_id" in session:
+        return session["usuario_id"]
 
     email = session.get("email")
+    if not email:
+        return None
+
+    conn = get_db()
+    cursor = conn.cursor()
 
     cursor.execute(
         """SELECT id FROM usuarios WHERE email = ?
@@ -419,8 +478,10 @@ def obter_user():
         (email,),
     )
     row = cursor.fetchone()
-    user_id = row[0]
-    return user_id
+    if row:
+        session["usuario_id"] = row[0]
+        return row[0]
+    return None
 
 
 def calcular_compra():
@@ -428,17 +489,19 @@ def calcular_compra():
 
     carrinho = []
     for item in carrinho_bruto:
-        dados_produto_dict = json.loads(item["dados_produto"])
-
-        item["produto_info"] = dados_produto_dict["produto"]
-
-        del item["dados_produto"]
-
+        if item.get("dados_produto"):
+            try:
+                dados_produto_dict = json.loads(item["dados_produto"])
+                item["produto_info"] = dados_produto_dict.get("produto", {})
+            except Exception:
+                item["produto_info"] = {"preco": item.get("preco", 0)}
+        else:
+            item["produto_info"] = {"preco": item.get("preco", 0)}
         carrinho.append(item)
 
     valor_compra = 0
     for item in carrinho:
-        valor_item = item["produto_info"]["preco"]
+        valor_item = item.get("produto_info", {}).get("preco", 0)
         valor_compra += valor_item
 
     return valor_compra
@@ -446,37 +509,59 @@ def calcular_compra():
 
 @app.route("/carrinho", methods=["GET", "POST"])
 def carrinho():
+    if not obter_user():
+        return redirect("/login")
+
     carrinho_bruto = obter_carrinho()
 
     carrinho = []
     for item in carrinho_bruto:
-        dados_produto_dict = json.loads(item["dados_produto"])
-
-        item["produto_info"] = dados_produto_dict["produto"]
-
-        del item["dados_produto"]
-
-        carrinho.append(item)
-    print(carrinho)
+        item_copy = dict(item)
+        if item_copy.get("dados_produto"):
+            try:
+                dados_produto_dict = json.loads(item_copy["dados_produto"])
+                item_copy["produto_info"] = dados_produto_dict.get("produto", {})
+            except Exception:
+                item_copy["produto_info"] = {
+                    "preco": item_copy.get("preco", 0),
+                    "nome": "",
+                    "tipo": "",
+                    "fotos": ["placeholder.png"],
+                }
+            if "dados_produto" in item_copy:
+                del item_copy["dados_produto"]
+        else:
+            item_copy["produto_info"] = {
+                "preco": item_copy.get("preco", 0),
+                "nome": "",
+                "tipo": "",
+                "fotos": ["placeholder.png"],
+            }
+        carrinho.append(item_copy)
     valor_compra = calcular_compra()
     return render_template("bag.html", carrinho=carrinho, valor_compra=valor_compra)
 
 
 @app.route("/wishlist")
 def wishlist():
+    if not obter_user():
+        return redirect("/login")
+
     wishlist_bruta = obter_wishlist()
 
     wishlist = []
     for item in wishlist_bruta:
-        dados_produto_dict = json.loads(item["dados_produto"])
+        item_copy = dict(item)
+        if item_copy.get("dados_produto"):
+            try:
+                dados_produto_dict = json.loads(item_copy["dados_produto"])
+                item_copy["produto_info"] = dados_produto_dict.get("produto", {})
+            except Exception:
+                item_copy["produto_info"] = {"fotos": ["placeholder.png"]}
+            if "dados_produto" in item_copy:
+                del item_copy["dados_produto"]
+        wishlist.append(item_copy)
 
-        item["produto_info"] = dados_produto_dict["produto"]
-
-        del item["dados_produto"]
-
-        wishlist.append(item)
-
-    print(f"wilist  recebida: {wishlist}")
     return render_template("wishlist.html", wishlist=wishlist)
 
 
@@ -545,36 +630,103 @@ def produtos():
 
 @app.route("/perfil")
 def perfil():
+    user_id = obter_user()
+    if not user_id:
+        return redirect("/login")
 
     conn = get_db()
     cursor = conn.cursor()
 
-    cursor.execute("SELECT foto FROM usuarios WHERE email = ?", (session.get("email"),))
-    url = cursor.fetchone()
+    cursor.execute("SELECT foto FROM usuarios WHERE id = ?", (user_id,))
+    row = cursor.fetchone()
+    foto_url = row["foto"] if (row and row["foto"]) else None
 
     return render_template(
         "perfil.html",
         usuario=session.get("usuario"),
         email=session.get("email"),
-        foto=url if url != "" or None else None,
+        foto=foto_url,
     )
-    
 
-@app.route('/faq')
+
+@app.route("/faq")
 def faq():
-    return render_template('faq.html')
+    return render_template("faq.html")
+
+
+@app.route("/dashboard")
+def dashboard():
+    return redirect("/produtos")
+
+
+@app.route("/remover_do_carrinho/<int:produto_id>", methods=["POST"])
+def remover_do_carrinho(produto_id):
+    user_id = obter_user()
+    if user_id:
+        conn = get_db()
+        cursor = conn.cursor()
+        cursor.execute(
+            "DELETE FROM carrinho WHERE (usuario_id = ? OR cliente_id = ?) AND produto_id = ?",
+            (user_id, user_id, produto_id),
+        )
+        conn.commit()
+    return redirect("/carrinho")
+
+
+@app.route("/adicionar_ao_carrinho/<int:produto_id>", methods=["POST"])
+def adicionar_ao_carrinho_route(produto_id):
+    user_id = obter_user()
+    if not user_id:
+        return redirect("/login")
+
+    conn = get_db()
+    cursor = conn.cursor()
+    cursor.execute("SELECT * FROM produtos WHERE produto_id = ?", (produto_id,))
+    prod = cursor.fetchone()
+    if prod:
+        fotos = cursor.execute(
+            "SELECT caminho FROM fotos_produto WHERE produto_id = ?", (produto_id,)
+        ).fetchall()
+        prod_data = {
+            "produto": {
+                "produto_id": prod["produto_id"],
+                "nome": prod["nome"],
+                "preco": prod["preco"],
+                "tipo": prod["tipo"],
+                "quantidade": prod["quantidade"],
+                "fotos": [f["caminho"] for f in fotos] if fotos else ["placeholder.png"],
+            },
+            "tamanho": prod["tamanho"].split(",")[0] if prod["tamanho"] else "M",
+        }
+        adicionar_ao_carrinho(user_id, prod_data)
+    return redirect("/carrinho")
+
+
+@app.route("/favicon/<path:filename>")
+@app.route("/favicon.ico")
+def favicon(filename="logo.png"):
+    return send_from_directory("static/assets", filename)
+
+
+@app.route("/font/<path:filename>")
+@app.route("/fonts/<path:filename>")
+@app.route("/static/font/<path:filename>")
+@app.route("/static/fonts/<path:filename>")
+@app.route("/static/styles/font/<path:filename>")
+def fonts(filename):
+    return send_from_directory("static/fonts", filename)
 
 
 @app.route("/aplicar_cupom", methods=["POST"])
 def aplicar_cupom():
-    if "usuario_id" not in session:
+    user_id = obter_user()
+    if not user_id:
         return redirect("/login")
 
     codigo_cupom = request.form.get("cupom", "").strip().upper()
     if not codigo_cupom:
         return redirect("/carrinho")
 
-    user_id = session["usuario_id"]
     conn = get_db()
     conn.row_factory = sqlite3.Row
     cur = conn.cursor()
@@ -592,7 +744,8 @@ def aplicar_cupom():
 
     # Aplica o cupom a todos os itens do carrinho do usuário
     cur.execute(
-        "UPDATE carrinho SET cupom = ? WHERE usuario_id = ?", (codigo_cupom, user_id)
+        "UPDATE carrinho SET cupom = ? WHERE usuario_id = ? OR cliente_id = ?",
+        (codigo_cupom, user_id, user_id),
     )
     conn.commit()
 
@@ -655,7 +808,8 @@ def obter_fator(regiao):
 
 @app.route("/calcular_frete", methods=["POST"])
 def calcular_frete_api():
-    if "usuario_id" not in session:
+    user_id = obter_user()
+    if not user_id:
         return jsonify({"erro": "Usuário não logado"}), 401
 
     # Pega o CEP do formulário e limpa (remove não-dígitos)
@@ -665,19 +819,18 @@ def calcular_frete_api():
     if len(cep_limpo) != 8:
         return jsonify({"erro": "CEP inválido. Forneça 8 dígitos."}), 400
 
-    user_id = session["usuario_id"]
     conn = get_db()
     cur = conn.cursor()
 
     # 1. Buscar itens do carrinho e juntar com produtos para obter tipo, preco e quantidade
     cur.execute(
         """
-        SELECT p.tipo, p.nome, c.quantidade, c.preco
+        SELECT c.id, c.produto_id, c.quantidade, c.preco, c.dados_produto, p.tipo, p.nome
         FROM carrinho c
-        JOIN produtos p ON c.produto_id = p.produto_id
-        WHERE c.usuario_id = ?
+        LEFT JOIN produtos p ON c.produto_id = p.produto_id
+        WHERE c.usuario_id = ? OR c.cliente_id = ?
     """,
-        (user_id,),
+        (user_id, user_id),
     )
     itens_carrinho = cur.fetchall()
 
@@ -689,18 +842,32 @@ def calcular_frete_api():
     valor_pedido_total_cents = 0
 
     for item in itens_carrinho:
-        peso_item = get_peso_por_tipo(item["tipo"])
-        peso_total_kg += peso_item * item["quantidade"]
-        valor_pedido_total_cents += int(item["preco"]) * int(
-            item["quantidade"]
-        )  # Preço já está em centavos
+        tipo = item["tipo"]
+        preco = item["preco"] or 0
+        qtd = item["quantidade"] or 1
+        if item["dados_produto"]:
+            try:
+                dp = json.loads(item["dados_produto"])
+                prod_info = dp.get("produto", {})
+                if not tipo:
+                    tipo = prod_info.get("tipo", "DEFAULT")
+                if not preco:
+                    preco = prod_info.get("preco", 0)
+            except Exception:
+                pass
+        if not tipo:
+            tipo = "DEFAULT"
+
+        peso_item = get_peso_por_tipo(tipo)
+        peso_total_kg += peso_item * qtd
+        valor_pedido_total_cents += int(preco) * int(qtd)
 
     desconto = session.get("desconto", 0)
     if desconto > 0:
         valor_pedido_total_cents = int(valor_pedido_total_cents * (1 - desconto))
 
     try:
-        res = requests.get(f"https://viacep.com.br/ws/{cep_limpo}/json/")
+        res = requests.get(f"https://viacep.com.br/ws/{cep_limpo}/json/", timeout=5)
         res.raise_for_status()  # Lança exceção para erros HTTP (4xx, 5xx)
         dados_cep = res.json()
 
@@ -751,6 +918,7 @@ def logout():
 
 
 if __name__ == "__main__":
-    init_db()
-    app.run(debug=True)
-    socketio.run(app, debug=True)
+    port = int(os.environ.get("PORT", 5000))
+    debug = os.environ.get("FLASK_DEBUG", "false").lower() in ["1", "true"]
+    socketio.run(app, debug=debug, host="0.0.0.0", port=port, allow_unsafe_werkzeug=True)
+

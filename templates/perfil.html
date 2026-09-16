@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Perfil</title>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link rel="stylesheet" href="/static/styles/profile.css">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap"
+        rel="stylesheet">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=League+Spartan:wght@100..900&display=swap" rel="stylesheet">
+    <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
+</head>
+
+<body>
+
+    <!-- Barra lateral fixa -->
+    <aside id="sidebar" class="sidebar">
+        <button id="toggleSidebar" class="hamburger-btn">
+            <i class="fa-solid fa-bars"></i>
+        </button>
+        <div class="gray-strip">
+            <div class="options">
+                <a href="/">INICIO</a>
+                <a href="/wishlist">WISHLIST</a>
+                <a href="/carrinho">CARRINHO</a>
+                <a href="/faq">SUPORTE</a>
+            </div>
+            <div class="logout-container">
+                <hr>
+                <a href="/logout" class="logout">LOGOUT</a>
+            </div>
+        </div>
+
+    </aside>
+
+    <main class="content">
+
+        <div class="profile-container">
+
+            <div class="profile-photo">
+                <div class="avatar-default" id="avatarDefault">
+                    <i class="fas fa-user"></i>
+                </div>
+
+                <img id="profileImage" class="hidden" {% if foto %} src="{{ foto }}" {% endif %}>
+
+                <label for="photoInput" class="upload-btn">
+                    <i class="fas fa-camera"></i>
+                </label>
+                <input id="photoInput" type="file" accept="image/*" hidden>
+            </div>
+
+            <div class="info">
+                <p class="label" style="font-family: libre baskerville, serif; color: #000000;">Name</p>
+                <p class="value" style="font-family: libre baskerville, serif; font-weight: bold; color: #000000;">{{
+                    usuario }}</p>
+
+                <p class="label" style="font-family: libre baskerville, 
+                serif; color: #000000;">E-mail</p>
+                <p class="value" style="font-family: libre baskerville, serif; font-weight: bold; color: #000000;">{{
+                    email }}</p>
+            </div>
+        </div>
+
+        <h3 class="last-purchases" style="font-family: libre baskerville, serif; color: #000000;">Últimas Compras</h3>
+
+    </main>
+
+    <script src="/static/scripts/profile.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Visualizer</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <link rel="stylesheet" href="/static/styles/visualizer.css" />
+    <link rel="stylesheet" href="/static/styles/header.css" />
+    <link rel="stylesheet" href="/static/styles/modal.css" />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400..700;1,400..700&display=swap"
+      rel="stylesheet"
+    />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Lustria&display=swap"
+      rel="stylesheet"
+    />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap"
+      rel="stylesheet"
+    />
+    <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
+  </head>
+
+  <body>
+    <div class="container-modal">
+      <div class="modal-roupa">
+        <h1>SEU PRODUTO JÁ FOI ADICIONADO!</h1>
+        <img src="/static/assets/confirm.png" alt="" />
+        <button onclick="closeModalRoupa()">CONFIRMAR</button>
+      </div>
+    </div>
+    <div class="overlay" onclick="closeModal()">
+      <div class="modal">
+        <article>
+          <h3>PERFIL</h3>
+          <p>Acesso ao perfil disponível apenas para usuários cadastrados</p>
+          <hr />
+          <p>
+            Para visualizar seu perfil, é necessário criar uma conta em nossa
+            plataforma. O cadastro é simples e garante acesso a todos os
+            recursos disponíveis.
+          </p>
+          <a href="/cadastro">CRIAR CONTA</a>
+          <a href="#" onclick="closeModal()">Continuar desconectado</a>
+        </article>
+        <div class="modal-img"></div>
+      </div>
+    </div>
+    <header class="menu-container">
+      <div class="logo">
+        <a href="/">NOIR VAULT</a>
+      </div>
+      <nav class="navegation-menu">
+        <div class="menu-icons">
+          <a onclick="loginCheck('/perfil')">
+            <i class="fa-solid fa-user" id="icon"></i>
+          </a>
+          {% if is_admin %}
+          <a href="/dashboard">
+            <i class="fa-solid fa-chart-pie" id="icon"></i>
+          </a>
+          {% endif %}
+          <a onclick="loginCheck('/wishlist')">
+            <i class="fa-solid fa-heart" id="icon"></i>
+          </a>
+          <a onclick="loginCheck('/carrinho')">
+            <i class="fa-sharp fa-solid fa-bag-shopping" id="icon"></i>
+          </a>
+        </div>
+      </nav>
+    </header>
+    <div class="container">
+      <div class="top">
+        <div class="gallery" aria-label="Galeria do produto">
+          <div class="main-photo">
+            <img src="" alt="main photo" class="foto1" />
+          </div>
+          <div class="thumbs-row" aria-hidden="false">
+            <div class="thumb"><img src="" alt="thumb 1" class="foto2" /></div>
+            <div class="thumb"><img src="" alt="thumb 2" class="foto3" /></div>
+            <div class="thumb"><img src="" alt="thumb 3" class="foto4" /></div>
+          </div>
+        </div>
+
+        <aside class="info" aria-label="Informações do produto">
+          <div>
+            <div class="brand-row">
+              <div>
+                <div
+                  class="brand"
+                  style="font-family: Libre Baskerville, serif"
+                ></div>
+                <div class="rating" aria-hidden="false">
+                  <span style="font-size: 14px; color: black"
+                    ><i class="fas fa-star"></i><i class="fas fa-star"></i
+                    ><i class="fas fa-star"></i><i class="fas fa-star"></i
+                    ><i class="far fa-star"></i
+                  ></span>
+                </div>
+              </div>
+            </div>
+            <div
+              class="subtitle"
+              style="font-family: Libre Baskerville, serif"
+            ></div>
+            <div
+              class="price"
+              style="font-family: Libre Baskerville, serif"
+            ></div>
+            <div
+              class="installments"
+              style="font-family: Libre Baskerville, serif"
+            ></div>
+            <select
+              id="size"
+              aria-label="Seleção de tamanho"
+              style="font-family: Lustria, serif"
+              class="tamanho"
+            >
+              <option class="option1">37</option>
+              <option class="option2">38</option>
+              <option class="option3">39</option>
+              <option class="option4">40</option>
+            </select>
+            <button
+              class="btn-buy"
+              aria-label="Comprar"
+              style="font-family: Playfair Display, serif"
+            >
+              COMPRAR
+            </button>
+            <div class="actions" role="group" aria-label="Ações">
+              <button
+                class="small-btn"
+                onclick="buscarUser('wishlist')"
+                aria-label="Adicionar à wishlist"
+                style="font-family: Playfair Display, serif"
+              >
+                <i class="far fa-heart"></i> WISHLIST
+              </button>
+              <button
+                class="small-btn"
+                onclick="buscarUser('carrinho')"
+                aria-label="Adicionar à sacola"
+                style="font-family: Playfair Display, serif"
+              >
+                <i class="fas fa-shopping-bag"></i> BAG
+              </button>
+            </div>
+            <!--
+          <div class="mini-gallery" aria-hidden="true">
+            <div class="mini"><img src="" alt="mini 1"></div>
+            <div class="mini"><img src="" alt="mini 2"></div>
+            <div class="mini"><img src="" alt="mini 3"></div>
+          </div>-->
+          </div>
+        </aside>
+      </div>
+
+      <section class="accordion" aria-label="Informações adicionais do produto">
+        <div class="acc-item">
+          <button
+            class="acc-header"
+            type="button"
+            style="font-family: Libre Baskerville, serif"
+          >
+            DETALHES
+            <i class="fa-solid fa-chevron-down"></i>
+          </button>
+          <div
+            class="acc-content"
+            style="font-family: Libre Baskerville, serif"
+          >
+            <p>
+              Detalhes do produto exibidos aqui. Material, origem e descrição
+              completa.
+            </p>
+          </div>
+        </div>
+        <div class="acc-item">
+          <button
+            class="acc-header"
+            type="button"
+            style="font-family: Libre Baskerville, serif"
+          >
+            TAMANHOS E MEDIDAS
+            <i class="fa-solid fa-chevron-down"></i>
+          </button>
+          <div
+            class="acc-content"
+            style="font-family: Libre Baskerville, serif"
+          >
+            <p>Tabelas de medidas, ajuste e recomendações de tamanho.</p>
+          </div>
+        </div>
+        <div class="acc-item">
+          <button
+            class="acc-header"
+            type="button"
+            style="font-family: Libre Baskerville, serif"
+          >
+            ENTREGAS, DEVOLUÇÕES E VENDEDOR
+            <i class="fa-solid fa-chevron-down"></i>
+          </button>
+          <div
+            class="acc-content"
+            style="font-family: Libre Baskerville, serif"
+          >
+            <p>
+              Informações de envio, políticas de devolução e dados do vendedor.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section class="related-section" aria-label="Produtos recomendados">
+        <div class="related-grid">
+          <div class="product-card">
+            <div class="product-thumb">
+              <img src="" alt="moon boot" />
+              <i class="far fa-heart product-heart"></i>
+            </div>
+            <div
+              class="product-name"
+              style="font-family: Libre Baskerville, serif"
+            >
+              MOON BOOT
+            </div>
+            <div class="product-line"></div>
+          </div>
+          <div class="product-card">
+            <div class="product-thumb">
+              <img src="" alt="denim tears" />
+              <i class="far fa-heart product-heart"></i>
+            </div>
+            <div
+              class="product-name"
+              style="font-family: Libre Baskerville, serif"
+            >
+              DENIM TEARS
+            </div>
+            <div class="product-line"></div>
+          </div>
+          <div class="product-card">
+            <div class="product-thumb">
+              <img src="" alt="shark lock" />
+              <i class="far fa-heart product-heart"></i>
+            </div>
+            <div
+              class="product-name"
+              style="font-family: Libre Baskerville, serif"
+            >
+              SHARK LOCK
+            </div>
+            <div class="product-line"></div>
+          </div>
+          <div class="product-card">
+            <div class="product-thumb">
+              <img src="" alt="vestido de cristais" />
+              <i class="far fa-heart product-heart"></i>
+            </div>
+            <div
+              class="product-name"
+              style="font-family: Libre Baskerville, serif"
+            >
+              VESTIDO DE CRISTAIS
+            </div>
+            <div class="product-line"></div>
+          </div>
+        </div>
+      </section>
+      <br />
+      <br />
+    </div>
+    <script src="/static/scripts/visualizer.js"></script>
+  </body>
+</html>

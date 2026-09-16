@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Cadastro de Produtos</title>
+</head>
+
+<body>
+  <h1>Cadastrar Produto</h1>
+
+  <form action="/produtos" method="POST" enctype="multipart/form-data">
+    <input type="text" name="nome" placeholder="Nome" required>
+    <input list="lista-tipos" name="tipo" id="tipo" placeholder="Tipo" required>
+    <datalist id="lista-tipos">
+      {% for tipo in tipos %}
+      <option value="{{ tipo }}"></option>
+      {% endfor %}
+    </datalist>
+    <input type="text" name="tamanho" placeholder="Tamanho" required>
+    <input type="number" name="quantidade" placeholder="Quantidade" required>
+    <input type="text" name="preco" placeholder="Preço" required>
+    <br>
+    <label for="foto1">foto 1</label>
+    <input type="file" name="foto1" accept="image/*" required>
+    <br>
+    <label for="foto2">foto 2</label>
+    <input type="file" name="foto2" accept="image/*" required>
+    <br>
+    <label for="foto3">foto 3</label>
+    <input type="file" name="foto3" accept="image/*" required>
+    <br>
+    <label for="foto4">foto 4</label>
+    <input type="file" name="foto4" accept="image/*" required>
+    <br>
+    <button type="submit">Cadastrar Produto</button>
+  </form>
+
+  <h2>Produtos Cadastrados</h2>
+  <table border="1">
+    <tr>
+      <th>ID</th>
+      <th>Nome</th>
+      <th>Tipo</th>
+      <th>Tamanho</th>
+      <th>Qtd</th>
+      <th>Preço (R$)</th>
+      <th>Foto</th>
+      <th>Ações</th>
+    </tr>
+
+    {% for p in produtos %}
+    <tr>
+      <td>{{ p['produto_id'] }}</td>
+      <td>{{ p['nome'] }}</td>
+      <td>{{ p['tipo'] }}</td>
+      <td>{{ p['tamanho'] }}</td>
+      <td>{{ p['quantidade'] }}</td>
+      <td>{{ "%.2f"|format(p['preco']/100) }}</td>
+      <td>
+        {% if p['foto'] %}
+        <img src="{{ url_for('static', filename='uploads/' ~ p['foto']) }}" width="80">
+        {% else %}
+        —
+        {% endif %}
+      </td>
+      <td>
+        <!-- Form para REMOVER produto -->
+        <form action="/remover_do_carrinho/{{ p['produto_id'] }}" method="POST" style="display:inline;">
+          <button type="submit">❌ Remover</button>
+        </form>
+
+        <!-- Form para ADICIONAR AO CARRINHO -->
+        <form action="/adicionar_ao_carrinho/{{ p['produto_id'] }}" method="POST" style="display:inline;">
+          <input type="hidden" name="quantidade" value="1">
+          <button type="submit">🛒 Adicionar</button>
+        </form>
+
+        <form action="/produto/{{ p['produto_id'] }}" method="GET">
+          <button type="submit">⭕ Ver produto</button>
+        </form>
+
+
+      </td>
+    </tr>
+    {% endfor %}
+  </table>
+  <br>
+  <a href="/carrinho">🛍️ Ver Carrinho</a>
+</body>
+
+</html>

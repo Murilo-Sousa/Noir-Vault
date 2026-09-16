@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Noir Vault</title>
+  <link rel="stylesheet" href="/static/styles/index.css" />
+  <link rel="stylesheet" href="/static/styles/hero.css" />
+  <link rel="stylesheet" href="/static/styles/contact.css" />
+  <link rel="shortcut icon" href="/favicon/logo.png" type="image/x-icon" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap"
+    rel="stylesheet" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&display=swap"
+    rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Lustria&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+  <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
+</head>
+
+<body>
+  {% if erro %}
+  <div id="erro-msg" data-erro="true"></div>
+  {% endif %}
+  <div class="overlay" onclick="closeModal()">
+    <div class="modal">
+      <article>
+        <h3>PERFIL</h3>
+        <p>Acesso ao perfil disponível apenas para usuários cadastrados</p>
+        <hr />
+        <p>
+          Para visualizar seu perfil, é necessário criar uma conta em nossa
+          plataforma. O cadastro é simples e garante acesso a todos os
+          recursos disponíveis.
+        </p>
+        <a href="/cadastro">CRIAR CONTA</a>
+        <a href="#" onclick="closeModal()">Continuar desconectado</a>
+      </article>
+      <div class="modal-img"></div>
+    </div>
+  </div>
+  <section alt="banner-inicial">
+    <!-- RESPONSÁVEL: MURILO -->
+    <section class="hero">
+      <h1 class="titleHero">NOIR VAULT</h1>
+      <div class="subtitle-container">
+        <p class="subtitle">LUXURY IN THE DARK</p>
+        <div class="line"></div>
+      </div>
+      <img src="/static/assets/pessoa.png" alt="Pessoa em destaque" class="hero-image" />
+    </section>
+
+    <!-- Banner de cookies -->
+    <div class="cookie-banner" id="cookieBanner">
+      <div class="cookie-text">
+        Utilizamos cookies para melhorar sua experiência, tornar a navegação
+        mais rápida e personalizar o site conforme suas preferências.
+      </div>
+      <button class="cookie-button" id="acceptCookies">ACEITAR</button>
+    </div>
+  </section>
+  <header class="menu-container">
+    <nav class="navegation-menu">
+      <label for="menu" id="link-menu4">
+        <i class="fa-solid fa-bars" id="open-button"></i>
+      </label>
+
+      <input type="checkbox" name="menu" id="menu" hidden />
+      <div id="hidden-menu">
+        <hr class="nav-hr" />
+        <a href="" id="link-menu">MULHER</a>
+        <a href="" id="link-menu2">HOMEM</a>
+        <a href="" id="link-menu3">KIDS</a>
+        <a href="" class="invisible">SAPATOS</a>
+        <a href="" class="invisible">ACESSÓRIOS</a>
+        <a href="" class="invisible">ROUPAS</a>
+        <a href="" class="invisible">SNEARKERS</a>
+        <a href="" class="invisible">BOTAS</a>
+      </div>
+      <div class="menu-icons">
+        <a onclick="loginCheck('/perfil')">
+          <i class="fa-solid fa-user" id="icon"></i>
+        </a>
+        {% if is_admin %}
+        <a href="/dashboard">
+          <i class="fa-solid fa-chart-pie" id="icon"></i>
+        </a>
+        {% endif %}
+        <a onclick="loginCheck('/wishlist')">
+          <i class="fa-solid fa-heart" id="icon"></i>
+        </a>
+        <a onclick="loginCheck('/carrinho')">
+          <i class="fa-sharp fa-solid fa-bag-shopping" id="icon"></i>
+        </a>
+      </div>
+    </nav>
+  </header>
+  <section alt="promocoes">
+    <!-- RESPONSÁVEL: JOSÉ -->
+    <div class="clothes">
+      <div class="clothe">
+        <h1>BOTA MONOLITH</h1>
+        <div class="decoration"></div>
+        <div class="card">
+          <img src="/static/assets/bota-monolith.png" alt="" class="roupa" />
+        </div>
+        <i class="fa-regular fa-heart" id="icon-roupa"></i>
+      </div>
+      <div class="clothe">
+        <h1>CALÇA BAGGY</h1>
+        <div class="decoration"></div>
+        <div class="card">
+          <img src="/static/assets/calca-baggy.png" alt="" class="roupa" id="calca" />
+        </div>
+        <i class="fa-regular fa-heart" id="icon-roupa"></i>
+      </div>
+      <div class="clothe">
+        <h1>SHARK LOCK</h1>
+        <div class="decoration"></div>
+        <div class="card">
+          <img src="/static/assets/shark-lock.png" alt="" class="roupa" id="bota" />
+        </div>
+        <i class="fa-regular fa-heart" id="icon-roupa"></i>
+      </div>
+      <div class="clothe">
+        <h1>CASACO DE COURO</h1>
+        <div class="decoration"></div>
+        <div class="card">
+          <img src="/static/assets/casaco-de-couro.png" alt="" class="roupa" />
+        </div>
+        <i class="fa-regular fa-heart" id="icon-roupa"></i>
+      </div>
+    </div>
+    <div class="title">
+      <h1>LIMITED EDIT</h1>
+    </div>
+  </section>
+  <section alt="secao-de-busca" id="secao-de-busca">
+    <!-- RESPONSÁVEL: JOSÉ -->
+    <div class="filtros" id="filtros">
+      <div class="search-bar" id="search-bar">
+        <i class="fa-solid fa-magnifying-glass"></i>
+        <p>O QUE ESTÁ PROCURANDO?</p>
+      </div>
+      <div class="filters">
+        <a href="" class="filter">SAPATOS</a>
+        <a href="" class="filter">ACESSÓRIOS</a>
+        <a href="" class="filter">ROUPAS</a>
+        <a href="" class="filter">SNEARKERS</a>
+        <a href="" class="filter">BOTAS</a>
+      </div>
+      <div class="clothes roupas-container">
+
+      </div>
+    </div>
+    </div>
+  </section>
+  <section alt="secao-de-contato" class="contact-section">
+    <h2 class="contact-title">
+      TALK <br />
+      TO <br />
+      US
+    </h2>
+    <form action="">
+      <legend class="form-inputs">
+        <input type="text" name="nome" id="nome" placeholder="Name" required />
+        <input type="email" name="email" id="email" placeholder="Email" required />
+        <textarea name="message" id="message" placeholder="Message" required></textarea>
+        <button type="submit">Enviar</button>
+      </legend>
+    </form>
+  </section>
+  <script src="/static/scripts/cookies.js"></script>
+  <script src="/static/scripts/index.js"></script>
+</body>
+
+</html>

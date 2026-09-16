@@ -1,0 +1,190 @@
+body {
+    margin: 0;
+    background: #fff;
+    transition: margin-left 0.3s ease;
+}
+
+/* Sidebar sempre visível */
+.sidebar {
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 70px;
+    height: 100vh;
+    background: #e6e6e6;
+    transition: width 0.3s ease;
+    overflow: hidden;
+    z-index: 5;
+}
+
+/* Faixa cinza */
+.gray-strip {
+    width: 100%;
+    height: 100%;
+    background: #e6e6e6;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: flex-start;
+}
+
+.gray-strip a {
+    font-family: 'Libre Baskerville', serif;
+    font-size: 20px;
+    text-decoration: none;
+    color: black;
+    margin-left: 15px;
+    opacity: 0;
+    position: relative;
+}
+
+.gray-strip a::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: -3px;
+    width: 0;
+    height: 2px;
+    background-color: currentColor;
+    transition: width 0.3s ease;
+}
+
+.gray-strip a:hover::after {
+    width: 100%;
+}
+
+.gray-strip a.visible {
+    opacity: 1;
+}
+
+.gray-strip hr.visible {
+    opacity: 1;
+}
+
+.options {
+    margin-top: 76px;
+    gap: 24px;
+    display: flex;
+    flex-direction: column;
+}
+
+.logout-container {
+    width: 100%;
+    margin-bottom: 24px;
+}
+
+.gray-strip hr {
+    width: 100%;
+    height: 1px;
+    background-color: #000000;
+    margin-bottom: 24px;
+    opacity: 0;
+}
+
+/* Quando abrir */
+.sidebar.open {
+    width: 220px;
+}
+
+/* Botão hambúrguer - AGORA DENTRO DA SIDEBAR */
+.hamburger-btn {
+    position: absolute;
+    top: 15px;
+    left: 15px;
+    background: none;
+    border: none;
+    font-size: 28px;
+    cursor: pointer;
+    z-index: 10;
+    transition: left 0.3s ease;
+}
+
+/* Conteúdo deslocado */
+.content {
+    margin-left: 90px;
+    padding: 40px;
+    transition: margin-left 0.3s ease;
+}
+
+/* Quando a sidebar está aberta, empurra o conteúdo */
+body.sidebar-open {
+    margin-left: 220px;
+}
+
+.sidebar-open .content {
+    margin-left: 0;
+}
+
+/* Remove a transição do left do botão hambúrguer pois agora ele está dentro da sidebar */
+.sidebar-open .hamburger-btn {
+    left: 15px; 
+}
+
+/* Perfil */
+.profile-container {
+    display: flex;
+    align-items: center;
+    gap: 50px;
+}
+
+.profile-photo {
+    position: relative;
+    width: 180px;
+    height: 180px;
+}
+
+/* Avatar padrão */
+.avatar-default {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    background: #b3b3b3;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 70px;
+    color: white;
+}
+
+/* Imagem carregada */
+#profileImage {
+    width: 180px;
+    height: 180px;
+    border-radius: 50%;
+    object-fit: cover;
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+.hidden {
+    display: none;
+}
+
+.upload-btn {
+    position: absolute;
+    bottom: 5px;
+    right: 5px;
+    background: #000000;
+    color: #fff;
+    padding: 10px;
+    border-radius: 50%;
+    cursor: pointer;
+}
+
+.info .label {
+    font-weight: bold;
+    margin-top: 20px;
+    font-size: 22px;
+}
+
+.info .value {
+    font-size: 18px;
+    letter-spacing: 2px;
+}
+
+.last-purchases {
+    margin-top: 60px;
+    font-size: 20px;
+    color: #444;
+}

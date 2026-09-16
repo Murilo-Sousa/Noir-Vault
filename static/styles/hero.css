@@ -1,0 +1,494 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+@font-face {
+  font-family: 'LeJourSerif';
+  src: url('/font/Le Jour Serif Personal Use Only.otf') format(opentype);
+  font-weight: bold;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'SimpleSerenitySerif';
+  src: url('/static/fonts/Simple-Serenity-Serif.ttf') format(truetype);
+  font-weight: bold;
+  font-style: normal;
+}
+
+body {
+  color: #000;
+  overflow-x: hidden;
+}
+
+.hero {
+  position: relative;
+  text-align: center;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+}
+
+/* Eleva o título */
+.titleHero {
+  font-family: 'SimpleSerenitySerif', serif;
+  font-size: 12rem;
+  font-weight: normal;
+  letter-spacing: 50px;
+  position: relative;
+  z-index: 1;
+  top: -250px;
+  /* subido para cima */
+  mix-blend-mode: darken;
+}
+
+/* Imagem no centro */
+.hero-image {
+  position: absolute;
+  bottom: 50;
+  width: 50%;
+  z-index: 2;
+}
+
+/* Legenda e linha */
+.subtitle-container {
+  position: absolute;
+  bottom: 65%;
+  /* subido um pouco */
+  width: 90%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-family: 'SimpleSerenitySerif', serif;
+}
+
+.subtitle {
+  font-weight: 900;
+  font-size: 40px;
+  letter-spacing: 5px;
+}
+
+.line {
+  width: 35%;
+  height: 2px;
+  background-color: #000;
+}
+
+/* Mensagem de cookies */
+.cookie-banner {
+  position: fixed;
+  bottom: -100px;
+  /* Começa fora da tela */
+  left: 0;
+  width: 100%;
+  background-color: rgba(255, 255, 255, 0.612);
+  color: #000000;
+  padding: 30px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-family: 'Lustria', serif;
+  z-index: 1000;
+  transition: bottom 0.8s ease-out;
+}
+
+.cookie-banner.show {
+  bottom: 0;
+  /* Sobe para a parte inferior da tela */
+}
+
+.cookie-text {
+  font-size: 15px;
+  letter-spacing: 3px;
+  margin-right: 20px;
+}
+
+.cookie-button {
+  background-color: #000000;
+  color: #ffffff;
+  border: none;
+  padding: 10px 100px;
+  font-family: 'Lustria', serif;
+  font-size: 14px;
+  letter-spacing: 1px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.cookie-button:hover {
+  transition: all 0.3s ease;
+  background-color: #d5d5d5;
+  color: #000000;
+}
+
+@media screen and (max-width: 2560px) {
+  .hero {
+    justify-content: flex-start;
+  }
+
+  .titleHero {
+    position: static;
+    font-size: 12vw;
+    letter-spacing: 45px;
+    line-height: 300px;
+    overflow: hidden;
+  }
+
+  .subtitle-container {
+    position: static;
+    width: 80%;
+  }
+
+  .subtitle {
+    font-weight: 900;
+    font-size: 50px;
+    letter-spacing: 10px;
+  }
+
+  .hero img {
+    height: 80%;
+    width: auto;
+    top: 140px;
+  }
+
+  .cookie-text {
+    font-size: 20px;
+  }
+}
+
+@media screen and (max-width: 1920px) {
+  .hero {
+    justify-content: flex-start;
+  }
+
+  .titleHero {
+    position: static;
+    font-size: 12vw;
+    letter-spacing: 45px;
+    line-height: 220px;
+    overflow: hidden;
+  }
+
+  .subtitle-container {
+    position: static;
+    width: 90%;
+  }
+
+  .subtitle {
+    font-weight: 900;
+    font-size: 50px;
+    letter-spacing: 10px;
+  }
+
+  .hero img {
+    height: 80%;
+    width: auto;
+    top: 140px;
+  }
+
+  .cookie-text {
+    font-size: 20px;
+  }
+}
+
+@media screen and (max-width: 1440px) {
+  .hero {
+    justify-content: flex-start;
+  }
+
+  .titleHero {
+    position: static;
+    font-size: 12vw;
+    letter-spacing: 30px;
+    line-height: 185px;
+    overflow: hidden;
+  }
+
+  .subtitle-container {
+    position: static;
+    width: 90%;
+  }
+
+  .subtitle {
+    font-size: 40px;
+    letter-spacing: 10px;
+  }
+
+  .cookie-text {
+    font-size: 16px;
+  }
+
+  .hero img {
+    height: 80%;
+    width: auto;
+    top: 140px;
+  }
+}
+
+@media screen and (max-width: 1024px) {
+  .hero {
+    width: 100vw;
+    display: flex;
+    justify-content: flex-start;
+    box-sizing: border-box;
+    margin: 0px;
+    align-items: center;
+  }
+
+  .hero img {
+    height: 70%;
+    width: auto;
+    top: 180px;
+  }
+
+  .titleHero {
+    position: static;
+    font-size: 18vw;
+    letter-spacing: 4px;
+    margin-top: 16px;
+  }
+
+  .titleHero h1 {
+    text-align: center;
+  }
+
+  .subtitle-container {
+    width: 100%;
+    position: static;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    font-family: 'SimpleSerenitySerif', serif;
+  }
+
+  .subtitle {
+    font-weight: 900;
+    font-size: 36px;
+    letter-spacing: 2px;
+    margin: 0px;
+    padding: 0px;
+    text-align: center;
+  }
+
+  .line {
+    width: 40%;
+    height: 2px;
+  }
+
+  .cookie-text {
+    font-size: 16px;
+    text-align: center;
+    margin: 0px;
+  }
+
+  .cookie-button {
+    background-color: #000000;
+    color: #ffffff;
+    border: none;
+    padding: 10px 100px;
+    font-family: 'Lustria', serif;
+    font-size: 14px;
+    letter-spacing: 1px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .hero {
+    width: 100vw;
+    display: flex;
+    justify-content: flex-start;
+    box-sizing: border-box;
+    margin: 0px;
+    align-items: center;
+  }
+
+  .hero img {
+    position: absolute;
+    height: 70%;
+    width: auto;
+  }
+
+  .titleHero {
+    position: static;
+    font-size: 16vw;
+    margin-top: 0px;
+    letter-spacing: 4px;
+    line-height: 160px;
+  }
+
+  .titleHero h1 {
+    text-align: center;
+  }
+
+  .subtitle-container {
+    width: 100%;
+    position: static;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    font-family: 'SimpleSerenitySerif', serif;
+  }
+
+  .subtitle {
+    font-weight: 900;
+    font-size: 26px;
+    letter-spacing: 2px;
+    margin: 0px;
+    padding: 0px;
+    text-align: center;
+  }
+
+  .line {
+    width: 40%;
+    height: 2px;
+  }
+
+  /* responsividade cookies */
+  .cookie-banner {
+    position: fixed;
+    bottom: -100px;
+    /* Começa fora da tela */
+    left: 0;
+    width: 100%;
+    background-color: rgba(255, 255, 255, 0.612);
+    color: #000000;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Lustria', serif;
+    z-index: 1000;
+    transition: bottom 0.8s ease-out;
+  }
+
+  .cookie-banner.show {
+    bottom: 0;
+    /* Sobe para a parte inferior da tela */
+  }
+
+  .cookie-text {
+    font-size: 16px;
+    text-align: center;
+    margin: 0px;
+    margin-bottom: 20px;
+  }
+
+  .cookie-button {
+    background-color: #000000;
+    color: #ffffff;
+    border: none;
+    padding: 10px 100px;
+    font-family: 'Lustria', serif;
+    font-size: 14px;
+    letter-spacing: 1px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+}
+
+/* RESPONSIVIDADE MOBILE */
+
+@media screen and (max-width: 440px) {
+  .hero {
+    width: 100vw;
+    display: flex;
+    justify-content: flex-start;
+    box-sizing: border-box;
+    margin: 0px;
+    align-items: center;
+  }
+
+  .hero img {
+    position: static;
+    height: 50%;
+    width: auto;
+    margin-top: 120px;
+  }
+
+  .titleHero {
+    position: static;
+    font-size: 16vw;
+    letter-spacing: 4px;
+    line-height: 120px;
+    margin-top: 26px;
+  }
+
+  .titleHero h1 {
+    text-align: center;
+  }
+
+  .subtitle-container {
+    width: 100%;
+    margin-top: 16px;
+    position: static;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'SimpleSerenitySerif', serif;
+  }
+
+  .subtitle {
+    font-weight: 900;
+    font-size: 24px;
+    letter-spacing: 2px;
+    margin: 0px;
+    padding: 0px;
+    text-align: center;
+  }
+
+  .line {
+    width: 0;
+    height: 0;
+  }
+
+  /* responsividade cookies */
+  .cookie-banner {
+    position: fixed;
+    bottom: -100px;
+    /* Começa fora da tela */
+    left: 0;
+    width: 100%;
+    background-color: rgba(255, 255, 255, 0.612);
+    color: #000000;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Lustria', serif;
+    z-index: 1000;
+    transition: bottom 0.8s ease-out;
+  }
+
+  .cookie-banner.show {
+    bottom: 0;
+    /* Sobe para a parte inferior da tela */
+  }
+
+  .cookie-text {
+    font-size: 16px;
+    text-align: center;
+    margin: 0px;
+    margin-bottom: 20px;
+  }
+
+  .cookie-button {
+    background-color: #000000;
+    color: #ffffff;
+    border: none;
+    padding: 10px 100px;
+    font-family: 'Lustria', serif;
+    font-size: 14px;
+    letter-spacing: 1px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+}

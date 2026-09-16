@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Bag — Produto</title>
+  <link rel="stylesheet" href="/static/styles/bag.css" />
+  <link rel="stylesheet" href="/static/styles/header.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Lustria&display=swap" rel="stylesheet">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap"
+    rel="stylesheet">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400..700;1,400..700&display=swap"
+    rel="stylesheet">
+  <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
+</head>
+
+<body>
+  <header class="menu-container">
+    <div class="logo">
+      <a href="/">NOIR VAULT</a>
+    </div>
+    <nav class="navegation-menu">
+      <div class="menu-icons">
+        <a href="/perfil">
+          <i class="fa-solid fa-user" id="icon"></i>
+        </a>
+        {% if is_admin %}
+        <a href="/dashboard">
+          <i class="fa-solid fa-chart-pie" id="icon"></i>
+        </a>
+        {% endif %}
+        <a href="/wishlist">
+          <i class="fa-solid fa-heart" id="icon"></i>
+        </a>
+        <a href="/carrinho">
+          <i class="fa-sharp fa-solid fa-bag-shopping" id="icon"></i>
+        </a>
+      </div>
+    </nav>
+  </header>
+  <main class="container">
+
+    <h1 class="titulo">BAG</h1>
+
+    <section class="col-esquerda">
+
+      {% for produto in carrinho %}
+
+      <div class="produto">
+        <div class="imagem" aria-hidden="true">
+          <img src="/static/assets/{{ produto.produto_info.fotos[0] }}" alt="" class="img-produto">
+          <button class="remover" aria-label="Remover item"
+            onclick="removerItem('{{ produto.id }}')">
+            <i class="fas fa-times"></i>
+          </button>
+
+        </div>
+
+        <div class="detalhes">
+          <div class="titulo-bloco">
+            <p class="marca">{{ produto.produto_info.nome }}</p>
+            <p class="descricao">{{ produto.produto_info.tipo }}</p>
+          </div>
+
+          <div class="preco-bloco">
+            <p class="preco">R$ {{ produto.produto_info.preco }}</p>
+          </div>
+
+          <div class="tamanho">
+            <p class="label" style="font-size:22px;">TAMANHO</p>
+            <p class="valor" style="font-size:13px;">{{ produto.tamanho_selecionado }}</p>
+          </div>
+        </div>
+      </div>
+
+      {% endfor %}
+
+      <!-- ENTREGA -->
+      <div class="entrega">
+        <p>PREVISÃO DE ENTREGA</p>
+        <span>1 DE JAN. E 3 DE JAN.</span>
+      </div>
+
+    </section>
+
+
+    <div class="divisor" aria-hidden="true"></div>
+
+    <aside class="resumo">
+      <h2 style="font-family: Libre baskerville, serif; font-style: normal;">RESUMO</h2>
+
+      <div class="linha">
+        <span>SUBTOTAL</span>
+        <span>R$ {{ valor_compra }}</span>
+      </div>
+
+      <div class="linha">
+        <span>FRETE</span>
+        <span>R$ 0</span>
+      </div>
+
+      <input type="text" class="cupom" placeholder="CUPOM DE DESCONTO" />
+
+      <div class="linha total">
+        <span>TOTAL</span>
+        <span>R$ {{ valor_compra }}</span>
+      </div>
+
+      <button class="finalizar" style="font-family: 'Playfair Display', serif;">FINALIZAR COMPRA</button>
+    </aside>
+
+  </main>
+  <script src="/static/scripts/bag.js"></script>
+</body>
+
+</html>

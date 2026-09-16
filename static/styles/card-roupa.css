@@ -1,0 +1,213 @@
+.clothes {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    width: 100vw;
+}
+
+.clothe h1 {
+    width: 300px;
+    font-family: 'Libre Baskerville', serif;
+    font-weight: normal;
+    font-size: 1.6vw;
+    letter-spacing: 4px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis
+}
+
+.decoration {
+    height: 6px;
+    width: 60px;
+    background-color: #000000;
+    margin-top: 4px;
+    margin-left: 4px;
+}
+
+.clothe {
+    margin-top: 26px;
+}
+
+.card {
+    display: flex;
+    justify-content: center;
+    margin-top: 10px;
+    background-color: #d7d7d7;
+    height: 380px;
+    width: 300px;
+    z-index: 0;
+    overflow: hidden;
+}
+
+.card .img {
+    position: relative;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    cursor: pointer;
+    overflow: hidden;
+
+    transition: opacity 0.2s ease-in;
+}
+
+.card .img-1 {
+    opacity: 1;
+}
+
+.card .img-2 {
+    opacity: 0;
+    height: 0px;
+    width: 0px;
+}
+
+.card:hover .img-1 {
+    opacity: 0;
+    height: 0px;
+    width: 0px;
+}
+
+.card:hover .img-2 {
+    opacity: 1;
+    height: 100%;
+    width: 100%;
+}
+
+#icon-roupa {
+    display: none;
+    position: relative;
+    font-size: 38px;
+    margin-left: 270px;
+    margin-top: -60px;
+}
+
+#icon-roupa:hover {
+    cursor: pointer;
+    color: #000000;
+}
+
+@media screen and (max-width: 2560px) {
+    .card {
+        display: flex;
+        justify-content: center;
+        margin-top: 18px;
+        height: 500px;
+        width: 420px;
+        z-index: 0;
+    }
+
+    .card img {
+        height: 500px;
+    }
+
+    .decoration {
+        margin-top: 12px;
+    }
+}
+
+@media screen and (max-width: 1920px) {
+    .card {
+        display: flex;
+        justify-content: center;
+        margin-top: 10px;
+        height: 440px;
+        width: 360px;
+        z-index: 0;
+    }
+
+    .card img {
+        height: 440px;
+    }
+}
+
+@media screen and (max-width: 1440px) {
+    .card {
+        height: 380px;
+        width: 300px;
+    }
+
+    .card img {
+        height: 380px;
+    }
+}
+
+@media screen and (max-width: 1024px) {
+    .clothe h1 {
+        font-size: 20px;
+        letter-spacing: 2px;
+        margin-top: 10px;
+    }
+
+    .decoration {
+        height: 4px;
+        width: 60px;
+    }
+
+    .card {
+        display: flex;
+        justify-content: center;
+        margin-top: 10px;
+        height: 360px;
+        width: 304px;
+        z-index: 0;
+    }
+
+    .card img {
+        height: 360px;
+    }
+
+    #icon-roupa {
+        display: none;
+    }
+}
+
+@media screen and (max-width: 648px) {
+    .card {
+        width: 260px;
+    }
+}
+
+@media screen and (max-width: 440px) {
+    .clothe {
+        width: 145px;
+        margin-top: 10px;
+    }
+
+    .clothe h1 {
+        font-size: 12px;
+        letter-spacing: 0px;
+    }
+
+    .decoration {
+        height: 3px;
+        width: 40px;
+        background-color: #000000;
+        margin-top: 4px;
+        margin-left: 4px;
+    }
+
+    .card {
+        margin-top: 10px;
+        background-color: #d7d7d7;
+        height: 210px;
+        width: 145px;
+        z-index: 0;
+    }
+
+    .card img {
+        height: 210px;
+
+    }
+
+    #icon-roupa {
+        display: none;
+    }
+
+    .promocoes .title h1 {
+        text-align: center;
+        align-self: center;
+        font-size: 12vw;
+        letter-spacing: 0px;
+    }
+}
