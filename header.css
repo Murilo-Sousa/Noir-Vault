@@ -1,0 +1,140 @@
+/* Estilos base (Desktop) - Código original fornecido */
+header {
+    width: 100%;
+    background-color: white;
+    margin: 0;
+    display: flex;
+    justify-content: space-between;
+    justify-self: center;
+    position: sticky;
+    top: 0px;
+    z-index: 9999;
+    /* acima de tudo */
+    isolation: isolate;
+    /* impede que contextos abaixo o ultrapassem */
+}
+
+.menu-container .logo {
+    margin-left: 70px;
+    padding-top: 26px;
+}
+
+.menu-container .logo a{
+    font-family: 'SimpleSerenitySerif', serif;
+    text-decoration: none;
+    color: #000000;
+    font-size: 32px;
+}
+
+nav {
+    display: flex;
+    justify-content: space-between;
+    padding-top: 26px;
+    padding-bottom: 26px;
+    background-color: white;
+}
+
+/* Mantendo a última regra de .menu-icons que sobrescreve a anterior */
+.menu-icons {
+    display: flex;
+    gap: 70px;
+    margin-right: 70px;
+}
+
+.menu-icons a {
+    color: #000000;
+}
+
+nav a i {
+    font-size: 36px;
+    transition: 0.5s;
+}
+
+nav a i:hover {
+    transition: 0.5s;
+    cursor: pointer;
+    color: grey;
+}
+
+/* ---------------------------------------------------------------------- */
+/* RESPONSIVIDADE - HEADER.CSS */
+/* ---------------------------------------------------------------------- */
+
+/* Telas Médias (Tablets) - Max-width: 1024px */
+@media (max-width: 1024px) {
+    .menu-container .logo {
+        margin-left: 40px; /* Reduzir margem */
+        padding-top: 20px;
+    }
+
+    .menu-container .logo a{
+        font-size: 28px; /* Reduzir tamanho da fonte */
+    }
+
+    nav {
+        padding-top: 20px;
+        padding-bottom: 20px;
+    }
+
+    .menu-icons {
+        gap: 40px; /* Reduzir espaçamento entre ícones */
+        margin-right: 40px; /* Reduzir margem */
+    }
+
+    nav a i {
+        font-size: 30px; /* Reduzir tamanho dos ícones */
+    }
+}
+
+/* Telas Pequenas (Celulares) - Max-width: 768px */
+@media (max-width: 768px) {
+    header {
+        /* Ajustar o header para telas menores */
+        padding: 10px 0;
+    }
+
+    .menu-container .logo {
+        margin-left: 20px; /* Reduzir margem */
+        padding-top: 0; /* Remover padding-top para centralizar verticalmente */
+        align-self: center;
+    }
+
+    .menu-container .logo a{
+        font-size: 24px; /* Reduzir tamanho da fonte */
+    }
+
+    nav {
+        padding-top: 0;
+        padding-bottom: 0;
+        align-self: center;
+    }
+
+    .menu-icons {
+        gap: 20px; /* Reduzir espaçamento entre ícones */
+        margin-right: 20px; /* Reduzir margem */
+    }
+
+    nav a i {
+        font-size: 24px; /* Reduzir tamanho dos ícones */
+    }
+}
+
+/* Telas Extra Pequenas (Small Phones) - Max-width: 480px */
+@media (max-width: 480px) {
+    .menu-container .logo {
+        margin-left: 10px;
+    }
+
+    .menu-container .logo a{
+        font-size: 20px;
+    }
+
+    .menu-icons {
+        gap: 15px;
+        margin-right: 10px;
+    }
+
+    nav a i {
+        font-size: 20px;
+    }
+}

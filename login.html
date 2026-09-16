@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Acess Vault</title>
+    <link rel="stylesheet" href="/static/styles/login.css" />
+    <link rel="shortcut icon" href="/favicon/logo.png" type="image/x-icon" />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap"
+      rel="stylesheet"
+    />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    {% if erro %}
+    <div class="tela-de-erro">
+      <p>{{ erro }}</p>
+    </div>
+    {% endif %}
+    <div class="container">
+      <!-- LADO ESQUERDO: IMAGEM -->
+      <div class="image-side">
+        <img id="random-image" alt="Imagem aleatória" />
+      </div>
+
+      <!-- LADO DIREITO: FORMULÁRIO -->
+      <div class="form-side">
+        <h1 class="title">
+          ACCESS
+          <span class="vault">VAULT</span>
+        </h1>
+
+        <form class="login-form" method="POST" action="/login">
+          <div class="input-container">
+            <input
+              type="email"
+              id="email"
+              name="email"
+              placeholder=" "
+              required
+            />
+            <label for="email" class="floating-label">Email</label>
+          </div>
+
+          <div class="input-container">
+            <input
+              type="password"
+              id="password"
+              name="password"
+              placeholder=" "
+              required
+            />
+            <label for="password" class="floating-label">Password</label>
+          </div>
+
+          <div class="join">
+            <button type="submit" class="join_us">JOIN US</button>
+            <a class="create" href="/cadastro">CRIAR CONTA</a>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <script src="/static/scripts/image-randomizer.js"></script>
+    <script src="/static/scripts/show-error.js"></script>
+  </body>
+</html>

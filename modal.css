@@ -1,0 +1,330 @@
+.container-modal {
+    display: flex;
+    justify-content: center;
+}
+
+/* Modal de Confirmação de Produto */
+.modal-roupa {
+    gap: 40px;
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: fixed;
+    align-self: center;
+    justify-self: center;
+    top: 25%;
+    height: 50%;
+    width: 40%;
+    background-color: white;
+    opacity: 1;
+    border-radius: 12px;
+    border: 1px solid #000000;
+    box-sizing: border-box; /* Adicionado para melhor controle de padding/border */
+    padding: 20px; /* Adicionado um padding para evitar que o conteúdo toque as bordas */
+    z-index: 1001; /* Garantir que fique acima do overlay */
+}
+
+.modal-roupa h1 {
+    margin: 0;
+    font-size: 20px;
+    font-family: 'Libre Baskerville', serif;
+    text-align: center;
+}
+
+.modal-roupa img {
+    height: 90px;
+    width: 90px;
+}
+
+.modal-roupa button {
+    font-family: 'Playfair Display';
+    height: 50px;
+    width: 60%;
+    font-size: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #000000;
+    color: #e9e9e9;
+    cursor: pointer;
+    border: none;
+}
+
+.modal-roupa button:hover {
+    background-color: grey;
+    transition: 0.5s;
+    border: none;
+}
+
+/* Overlay */
+.overlay {
+    position: fixed;
+    justify-content: center;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    background-color: rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    display: none;
+    z-index: 1000;
+}
+
+/* Modal de Login/Perfil */
+.modal {
+    display: none;
+    position: relative;
+    align-self: center;
+    justify-self: center;
+    height: 80%;
+    width: 60%;
+    background-color: #e6e6e6;
+    opacity: 0;
+    display: flex; /* Necessário para que o .visible funcione */
+    transition: opacity 0.3s ease-in-out;
+}
+
+.modal article {
+    font-family: 'Playfair Display';
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    width: 50%;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+.modal article h3 {
+    font-family: 'Playfair Display';
+    margin-top: 40px;
+    font-size: 24px;
+}
+
+.modal article p {
+    font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    margin-top: 40px;
+    padding: 0px 30px;
+    font-size: 24px;
+    font-weight: lighter;
+}
+
+.modal article p:first-of-type {
+    font-family: 'Libre Baskerville';
+    margin-top: 32px;
+    font-size: 16px;
+}
+
+.modal article hr {
+    margin-top: 50px;
+    height: 6px;
+    width: 50px;
+    background-color: #000000;
+    border: none;
+}
+
+.modal article a:first-of-type {
+    font-family: 'Playfair Display';
+    height: 56px;
+    width: 80%;
+    font-size: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #000000;
+    color: #e9e9e9;
+    margin-top: 36px;
+    cursor: pointer;
+    text-decoration: none;
+}
+
+.modal article a:first-of-type:hover {
+    transition: 0.2s;
+    background-color: #343434;
+}
+
+.modal article a {
+    text-decoration: none;
+    color: #000000;
+    margin-top: 14px;
+    font-size: 16px;
+}
+
+.modal .modal-img {
+    width: 50%;
+}
+
+.visible {
+    display: flex !important;
+    opacity: 1 !important;
+}
+
+.modal-img {
+    background-image: url(/static/assets/modal-login.png);
+    background-position: center;
+    background-size: cover;
+}
+
+/* ---------------------------------------------------------------------- */
+/* RESPONSIVIDADE - MODAL.CSS */
+/* ---------------------------------------------------------------------- */
+
+/* Telas Médias (Tablets) - Max-width: 1024px */
+@media (max-width: 1024px) {
+    /* Modal de Confirmação de Produto */
+    .modal-roupa {
+        width: 60%;
+        height: auto;
+        top: 15%;
+        gap: 20px;
+    }
+
+    .modal-roupa h1 {
+        font-size: 18px;
+    }
+
+    .modal-roupa img {
+        height: 70px;
+        width: 70px;
+    }
+
+    .modal-roupa button {
+        width: 70%;
+        font-size: 18px;
+        height: 45px;
+    }
+
+    /* Modal de Login/Perfil */
+    .modal {
+        width: 80%;
+        height: 70%;
+    }
+
+    .modal article {
+        width: 55%;
+    }
+
+    .modal .modal-img {
+        width: 45%;
+    }
+
+    .modal article h3 {
+        margin-top: 30px;
+        font-size: 22px;
+    }
+
+    .modal article p {
+        margin-top: 30px;
+        font-size: 20px;
+    }
+
+    .modal article a:first-of-type {
+        font-size: 20px;
+        height: 50px;
+    }
+}
+
+/* Telas Pequenas (Celulares) - Max-width: 768px */
+@media (max-width: 768px) {
+    /* Modal de Confirmação de Produto */
+    .modal-roupa {
+        width: 90%;
+        top: 10%;
+        gap: 15px;
+        padding: 15px;
+    }
+
+    .modal-roupa h1 {
+        font-size: 16px;
+    }
+
+    .modal-roupa img {
+        height: 60px;
+        width: 60px;
+    }
+
+    .modal-roupa button {
+        width: 80%;
+        font-size: 16px;
+        height: 40px;
+    }
+
+    /* Modal de Login/Perfil */
+    .modal {
+        width: 95%;
+        height: auto;
+        flex-direction: column;
+        top: 5%;
+        position: absolute;
+        margin: 20px 0;
+    }
+
+    .overlay {
+        align-items: flex-start;
+        overflow-y: auto;
+    }
+
+    .modal article {
+        width: 100%;
+        order: 2;
+    }
+
+    .modal .modal-img {
+        width: 100%;
+        height: 200px;
+        order: 1;
+    }
+
+    .modal article h3 {
+        margin-top: 20px;
+        font-size: 20px;
+    }
+
+    .modal article p {
+        margin-top: 20px;
+        padding: 0px 15px;
+        font-size: 18px;
+    }
+
+    .modal article hr {
+        margin-top: 30px;
+    }
+
+    .modal article a:first-of-type {
+        font-size: 18px;
+        height: 45px;
+        width: 90%;
+    }
+}
+
+/* Telas Extra Pequenas (Small Phones) - Max-width: 480px */
+@media (max-width: 480px) {
+    .modal-roupa h1 {
+        font-size: 14px;
+    }
+
+    .modal-roupa img {
+        height: 50px;
+        width: 50px;
+    }
+
+    .modal-roupa button {
+        font-size: 14px;
+        height: 35px;
+    }
+
+    .modal article h3 {
+        font-size: 18px;
+    }
+
+    .modal article p {
+        font-size: 16px;
+    }
+
+    .modal article a:first-of-type {
+        font-size: 16px;
+        height: 40px;
+    }
+}

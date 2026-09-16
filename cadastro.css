@@ -1,0 +1,205 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+@font-face {
+    font-family: 'LeJourSerif';
+    src: url('../font/Le Jour Serif Personal Use Only.otf') format(opentype);
+    font-weight: normal;
+    font-style: normal;
+}
+
+body {
+    background-color: #000000;
+    height: 100vh;
+    display: flex;
+    align-items: stretch;
+    justify-content: center;
+}
+
+.container {
+    display: flex;
+    width: 100%;
+    max-width: 1200px;
+    height: 100vh;
+    background-color: #000000;
+    flex-direction: row-reverse;
+}
+
+.image-side {
+    flex: 1.2;
+    display: flex;
+    align-items: flex-end;
+    justify-content: flex-end;
+    overflow: hidden;
+}
+
+.image-side img {
+    height: 95vh;
+    width: auto;
+    object-fit: contain;
+    margin-right: 0;
+}
+
+/* ===============================
+FORMULÁRIO - lado esquerdo
+================================*/
+.form-side {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 60px;
+}
+
+/* ===============================
+TÍTULO
+================================*/
+.title {
+    font-family: 'Playfair Display', serif;
+    position: relative;
+    font-size: 45px;
+    font-weight: bold;
+    letter-spacing: 2px;
+    color: #e6e6e6;
+    text-align: left;
+    line-height: 1.1;
+    width: 100%;
+    margin-left: 0;
+}
+
+.vault {
+    color: #e6e6e6;
+    font-family: 'LeJourSerif';
+    font-weight: normal;
+    display: block;
+    position: relative;
+    font-size: 25px;
+    letter-spacing: 2px;
+    left: 0;
+    margin-top: 10px;
+    text-align: left;
+}
+
+/* ===============================
+FORMULÁRIO DE LOGIN
+================================*/
+.login-form {
+    font-family: 'Libre Baskerville', serif;
+    width: 80%;
+    margin-top: 60px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 25px;
+}
+
+/* Container do campo com label flutuante */
+.input-container {
+    position: relative;
+    width: 100%;
+    margin-bottom: 10px;
+}
+
+/* Input */
+input {
+    width: 100%;
+    border: 1.5px solid #999;
+    outline: none;
+    background-color: transparent;
+    font-size: 20px;
+    color: #ffffff;
+    padding: 15px 20px;
+    border-radius: 2px;
+    transition: border-color 0.3s;
+}
+
+input:focus {
+    border-color: #999;
+}
+
+/* Label flutuante */
+.floating-label {
+    position: absolute;
+    top: 50%;
+    left: 20px;
+    transform: translateY(-50%);
+    font-size: 15px;
+    color: #666;
+    pointer-events: none;
+    transition: all 0.5s ease;
+    background-color: #000000;
+    padding: 0 5px;
+}
+
+/* Quando o input está focado ou tem valor, a label sobe */
+input:focus + .floating-label,
+input:not(:placeholder-shown) + .floating-label {
+    top: 0;
+    font-size: 14px;
+    color: #ffffff;
+}
+
+/* ===============================
+  LINK "JOIN US"
+================================*/
+.join {
+    display: flex;
+    flex-direction: column;
+    margin-top: 30px;
+    text-align: center;
+    align-items: center;
+    width: 100%;
+}
+
+.join a {
+    font-family: 'Playfair Display';
+    margin-top: 16px;
+    text-decoration: none;
+    color: #ffffff;
+    position: relative;
+    max-width: fit-content;
+    align-items: center;
+}
+
+.join a::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: -5px;
+    width: 0;
+    height: 2px;
+    background-color: currentColor;
+    transition: width 0.3s ease;
+}
+
+.join a:hover::after {
+    width: 100%;
+}
+
+.create {
+    background: none;
+    border: none;
+    outline: none;
+    padding: 0;
+    margin: 0;
+    font: inherit;
+    color: #e6e6e6;
+    font-weight: bold;
+    font-size: 30px;
+    letter-spacing: 5px;
+    text-decoration: none;
+    transition: all 0.5s ease-in-out;
+    cursor: pointer;
+    display: inline-block;
+} 
+
+.create:hover {
+    color: #919191;
+    letter-spacing: 1px;
+    transition: all 0.5s ease-in-out;
+}
+

@@ -1,0 +1,512 @@
+@import url(/static/styles/card-roupa.css);
+
+* {
+    margin: 0;
+    padding: 0;
+}
+
+@font-face {
+    font-family: 'LeJourSerif';
+    src: url('font/Le Jour Serif Personal Use Only.otf') format(opentype);
+    font-weight: normal;
+    font-style: normal;
+}
+
+.promocoes {
+    background-color: #e9e9e9;
+}
+
+header {
+    width: 100%;
+    margin: 0;
+    justify-self: center;
+    position: sticky;
+    top: 0px;
+    z-index: 9999;
+    /* acima de tudo */
+    isolation: isolate;
+    /* impede que contextos abaixo o ultrapassem */
+}
+
+nav {
+    width: 100vw;
+    display: flex;
+    justify-content: space-between;
+    padding-top: 26px;
+    padding-bottom: 26px;
+    z-index: 999;
+}
+
+nav label,
+.nav-hr {
+    display: none;
+}
+
+.navegation-menu {
+    background-color: white;
+    z-index: 999;
+}
+
+#hidden-menu a {
+    position: relative;
+    font-family: 'Lucida Sans', 'sans-serif';
+    margin-left: 35px;
+    text-decoration: none;
+    color: #000000;
+    font-size: 26px;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.4s ease;
+    z-index: 999;
+}
+
+.invisible {
+    display: none;
+}
+
+#hidden-menu a.visible {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+nav label {
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.4s ease;
+    z-index: 999
+}
+
+nav label.visible {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+#hidden-menu a::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: -3px;
+    /* distância da linha para o texto */
+    width: 0;
+    height: 2px;
+    background-color: currentColor;
+    /* usa a cor do texto */
+    transition: width 0.3s ease;
+}
+
+nav a:hover::after {
+    width: 100%;
+}
+
+.menu-icons {
+    display: flex;
+    gap: 70px;
+    margin-right: 70px;
+}
+
+.menu-icons a {
+    color: #000000;
+}
+
+nav a i {
+    font-size: 36px;
+    transition: 0.5s;
+}
+
+nav a i:hover {
+    transition: 0.5s;
+    cursor: pointer;
+    color: grey;
+}
+
+.clothes {
+    display: flex;
+    justify-content: space-around;
+    margin-top: 40px;
+    width: 100%;
+}
+
+.title {
+    display: flex;
+    font-family: 'Libre Baskerville', serif;
+    height: 170px;
+    justify-content: center;
+    align-items: center;
+    font-size: 40px;
+    letter-spacing: 40px;
+}
+
+
+#secao-de-busca {
+    width: 100vw;
+    margin-top: 40px;
+    padding-bottom: 180px;
+    background-color: #e9e9e9;
+}
+
+.filtros {
+    margin-top: 10px;
+    padding-top: 120px;
+}
+
+.search-bar {
+    display: flex;
+    align-items: center;
+}
+
+.search-bar i {
+    font-size: 40px;
+    margin-left: 34px;
+}
+
+.search-bar p {
+    font-size: 24px;
+    margin-left: 22px;
+    letter-spacing: 4px;
+}
+
+.filters {
+    display: flex;
+    justify-content: center;
+    margin-top: 64px;
+    gap: 64px;
+    
+}
+
+.filters a {
+    font-size: 30px;
+    color: #000000;
+    text-decoration: none;
+    font-weight: normal;
+    position: relative;
+}
+
+.filters a::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: -3px;
+    /* distância da linha para o texto */
+    width: 0;
+    height: 2px;
+    background-color: currentColor;
+    /* usa a cor do texto */
+    transition: width 0.3s ease;
+}
+
+.filters a:hover::after {
+    width: 100%;
+}
+
+.roupas-container {
+    width: 90%;
+    height: auto;
+    justify-self: center;
+    margin-top: 90px;
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.overlay {
+    position: fixed;
+    justify-content: center;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    background-color: rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    display: none;
+}
+
+.modal {
+    display: none;
+    position: relative;
+    align-self: center;
+    justify-self: center;
+    height: 80%;
+    width: 60%;
+    background-color: #e6e6e6;
+    opacity: 0;
+}
+
+.modal article {
+    font-family: 'Playfair Display';
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    width: 50%;
+}
+
+.modal article h3 {
+    font-family: 'Playfair Display';
+    margin-top: 40px;
+    font-size: 24px;
+}
+
+.modal article p {
+    font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    margin-top: 40px;
+    padding: 0px 30px;
+    font-size: 24px;
+    font-weight: lighter;
+}
+
+.modal article p:first-of-type {
+    font-family: 'Libre Baskerville';
+    margin-top: 32px;
+    font-size: 16px;
+}
+
+.modal article hr {
+    margin-top: 50px;
+    height: 6px;
+    width: 50px;
+    background-color: #000000;
+    border: none;
+}
+
+.modal article a:first-of-type {
+    font-family: 'Playfair Display';
+    height: 56px;
+    width: 80%;
+    font-size: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #000000;
+    color: #e9e9e9;
+    margin-top: 36px;
+    cursor: pointer;
+}
+
+.modal article a:first-of-type:hover {
+    transition: 0.2s;
+    background-color: #343434;
+}
+
+.modal article a {
+    text-decoration: none;
+    color: #000000;
+    margin-top: 14px;
+    font-size: 16px;
+}
+
+.modal .modal-img {
+    width: 50%;
+}
+
+.visible {
+    display: flex;
+    opacity: 1;
+}
+
+.modal-img {
+    background-image: url(/static/assets/modal-login.png);
+    background-position: center;
+}
+
+@media screen and (max-width: 2560px) {
+    .title {
+        margin-top: 80px;
+    }
+}
+
+@media screen and (max-width: 1920px) {
+    .title {
+        margin-top: 50px;
+        font-size: 3.4rem; 
+    }
+}
+
+@media screen and (max-width: 1440px) {
+    .clothes {
+        display: flex;
+        justify-content: space-around;
+        margin-top: 90px;
+        width: 100%;
+    }
+
+    .title {
+        display: flex;
+        font-family: 'Libre Baskerville', serif;
+        height: 170px;
+        justify-content: center;
+        align-items: center;
+        font-size: 2.8rem;
+        letter-spacing: 40px;
+    }
+}
+
+@media screen and (max-width: 1024px) {
+    .menu-icons {
+        display: flex;
+        gap: 50px;
+        margin-right: 40px;
+    }
+
+    .clothes {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        width: 100vw;
+        margin-top: 0px;
+        gap: 6%;
+    }
+
+    .title {
+        height: 100px;
+        font-size: 30px;
+        letter-spacing: 15px;
+        text-align: center;
+        margin-top: 50px;
+    }
+
+    .filters {
+        gap: 40px;
+        margin-top: 50px;
+    }
+
+    .filters a {
+        font-size: 24px;
+    }
+}
+
+@media screen and (max-width: 440px) {
+    header {
+        margin: 0;
+        justify-self: center;
+        position: sticky;
+        top: 0px;
+        z-index: 9998;
+        /* acima de tudo */
+        isolation: isolate;
+        /* impede que contextos abaixo o ultrapassem */
+    }
+
+    nav {
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+        padding-top: 26px;
+        padding-bottom: 26px;
+        background-color: #e6e6e6;
+        z-index: 999;
+    }
+
+    nav label,
+    hr {
+        display: block;
+    }
+
+    #hidden-menu {
+        display: none;
+        flex-direction: column;
+        position: absolute;
+        margin-top: 35px;
+        background-color: #f5f5f5;
+        width: 100%;
+        gap: 25px;
+        padding: 20px 0px;
+        transition: max-height 0.5s ease-in-out, opacity 0.5s ease-in-out;
+    }
+
+    #hidden-menu a {
+        margin-left: 20px;
+    }
+
+    nav input[type="checkbox"]:checked~#hidden-menu {
+        display: flex;
+    }
+
+    nav i {
+        font-size: 24px;
+    }
+
+    nav label {
+        margin-left: 20px;
+    }
+
+    .menu-icons {
+        display: flex;
+        gap: 30px;
+        margin-right: 20px;
+    }
+
+    nav a {
+        font-size: 26px;
+        opacity: 1;
+        pointer-events: all;
+    }
+
+    nav a.visible {
+        opacity: 1;
+        pointer-events: auto;
+    }
+
+    nav a::after {
+        content: "";
+        position: absolute;
+        left: 0;
+        bottom: -3px;
+        /* distância da linha para o texto */
+        width: 0;
+        height: 2px;
+        background-color: currentColor;
+        /* usa a cor do texto */
+        transition: width 0.3s ease;
+    }
+
+    nav a:hover::after {
+        width: 100%;
+    }
+
+    .clothes {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        width: 100vw;
+        margin-top: 0px;
+        gap: 6%;
+    }
+
+    .title {
+        height: 100px;
+        align-items: start;
+        font-size: 20px;
+        letter-spacing: 15px;
+        text-align: center;
+        margin-top: 30px;
+    }
+
+    .filtros {
+        margin-top: 10px;
+        padding-top: 100px;
+    }
+
+    .search-bar {
+        display: flex;
+        align-items: center;
+    }
+
+    .search-bar i {
+        font-size: 30px;
+        margin-left: 16px;
+    }
+
+    .search-bar p {
+        font-size: 20px;
+        margin-left: 16px;
+        letter-spacing: 2px;
+    }
+
+    .filters {
+        display: none;
+    }
+
+    .invisible {
+        display: block;
+    }
+}

@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Wishlist</title>
+  <link rel="stylesheet" href="/static/styles/wishlist.css" />
+  <link rel="stylesheet" href="/static/styles/header.css" />
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap"
+    rel="stylesheet" />
+  <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
+</head>
+
+<body>
+  <header class="menu-container">
+    <div class="logo">
+      <a href="/">NOIR VAULT</a>
+    </div>
+    <nav class="navegation-menu">
+      <div class="menu-icons">
+        <a href="/perfil">
+          <i class="fa-solid fa-user" id="icon"></i>
+        </a>
+        {% if is_admin %}
+        <a href="/dashboard">
+          <i class="fa-solid fa-chart-pie" id="icon"></i>
+        </a>
+        {% endif %}
+        <a href="/wishlist">
+          <i class="fa-solid fa-heart" id="icon"></i>
+        </a>
+        <a href="/carrinho">
+          <i class="fa-sharp fa-solid fa-bag-shopping" id="icon"></i>
+        </a>
+      </div>
+    </nav>
+  </header>
+  <main class="page">
+    <section class="carousel-wrap">
+      <div class="carousel" id="carousel">
+      </div>
+    </section>
+  </main>
+
+  <footer class="bottom-controls">
+    <input id="track" type="range" min="0" value="0" step="1" />
+    <div class="wishlist">WISHLIST</div>
+  </footer>
+
+  <script src="/static/scripts/wishlist.js"></script>
+  <script>
+    const wishlist = {{ wishlist | tojson }};
+
+    // Gera dinamicamente os cards da wishlist
+    wishlist.forEach((item) => {
+      const produto = item.produto_info;
+
+      const card = document.createElement("div");
+      card.classList.add("card");
+      card.style.position = "relative"; // permite posicionar o botão no canto
+
+      card.setAttribute.dataProduto = JSON.stringify(item)
+      // Define imagem principal
+      const img = document.createElement("img");
+      img.src = `/static/assets/${produto.fotos[0]}`;
+      img.alt = produto.nome;
+      img.style.width = "100%";
+      img.style.height = "100%";
+      img.style.objectFit = "cover";
+      img.style.borderTopLeftRadius = "12px";
+      img.style.borderTopRightRadius = "12px";
+
+      // 👉 BOTÃO DE REMOVER (CANTO INFERIOR DIREITO)
+      const btnRemover = document.createElement("button");
+      btnRemover.innerText = "x";
+      btnRemover.setAttribute("aria-label", "Remover item");
+      btnRemover.onclick = () => removerWishlist(item.id);
+      btnRemover.classList.add("btn-remover")
+
+      // estilos do botão
+      btnRemover.style.position = "absolute";
+      btnRemover.style.bottom = "8px";
+      btnRemover.style.right = "8px";
+      btnRemover.style.width = "30px";
+      btnRemover.style.height = "30px";
+      btnRemover.style.border = "none";
+      btnRemover.style.backgroundColor = "#1B1B1B";
+      btnRemover.style.color = "#fff";
+      btnRemover.style.cursor = "pointer";
+      btnRemover.style.fontWeight = "bold";
+      btnRemover.style.fontSize = "16px";
+
+      // Adiciona elementos ao card
+      card.appendChild(img);
+      card.appendChild(btnRemover);
+      carousel.appendChild(card);
+    });
+  </script>
+</body>
+
+</html>

@@ -1,0 +1,250 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+@font-face {
+    font-family: 'LeJourSerif';
+    src: url('font/Le Jour Serif Personal Use Only.otf') format(opentype);
+    font-weight: normal;
+    font-style: normal;
+}
+
+body {
+    background-color: #e6e6e6;
+    height: 100vh;
+    display: flex;
+    align-items: stretch;
+    justify-content: center;
+}
+
+.tela-de-erro {
+    position: absolute;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    top: -200px;
+    left: 50%;
+    background-color: #000000;
+    opacity: 0.8;
+    height: 80px;
+    width: 500px;
+    box-shadow: 0px 10px 20px #fff;
+    border-radius: 0px 0px 6px 6px;
+    isolation: isolate;
+    transform: translate(-50%, 0%);
+    transition: all 0.6s ease;
+}
+
+.tela-de-erro p {
+    font-family: 'LeJourSerif';
+    font-weight: bold;
+    letter-spacing: 4px;
+    font-size: 24px;
+    color: #fff;
+}
+
+.slide-down {
+  animation: descer 0.6s ease-out forwards;
+}
+
+@keyframes descer {
+  0% {
+    top: -200px;
+    opacity: 0;
+  }
+  100% {
+    top: 40px;
+    opacity: 0.8;
+  }
+}
+
+.container {
+    display: flex;
+    width: 100%;
+    max-width: 1200px;
+    height: 100vh;
+    background-color: #e6e6e6;
+}
+
+.image-side {
+    flex: 1.2;
+    display: flex;
+    align-items: flex-end;
+    justify-content: flex-start;
+    overflow: hidden;
+}
+
+.image-side img {
+    height: 90vh;
+    width: auto;
+    object-fit: contain;
+    margin-left: 0;
+}
+
+/* ===============================
+FORMULÁRIO - lado direito
+================================*/
+.form-side {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 60px;
+}
+
+/* ===============================
+TÍTULO
+================================*/
+.title {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    font-family: 'Playfair Display', serif;
+    font-size: 120px;
+    font-weight: bold;
+    letter-spacing: 2px;
+    color: #000;
+    text-align: center;
+    line-height: 1.1;
+    
+}
+
+.vault {
+    font-family: 'LeJourSerif';
+    font-weight: normal;
+    display: block;
+    font-size: 40px;
+    letter-spacing: 2px;
+    left: 160px;
+    margin-top: -5px;
+}
+
+/* ===============================
+FORMULÁRIO DE LOGIN
+================================*/
+.login-form {
+    font-family: 'Libre Baskerville', serif;
+    width: 80%;
+    margin-top: 60px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 25px;
+}
+
+/* Container do campo com label flutuante */
+.input-container {
+    position: relative;
+    width: 100%;
+    margin-bottom: 10px;
+}
+
+/* Input */
+input {
+    width: 100%;
+    border: 1.5px solid #999;
+    outline: none;
+    background-color: transparent;
+    font-size: 20px;
+    color: #000;
+    padding: 15px 20px;
+    border-radius: 2px;
+    transition: border-color 0.3s;
+}
+
+input:focus {
+    border-color: #000;
+}
+
+/* Label flutuante */
+.floating-label {
+    position: absolute;
+    top: 50%;
+    left: 20px;
+    transform: translateY(-50%);
+    font-size: 15px;
+    color: #666;
+    pointer-events: none;
+    transition: all 0.5s ease;
+    background-color: #e6e6e6;
+    padding: 0 5px;
+}
+
+/* Quando o input está focado ou tem valor, a label sobe */
+input:focus + .floating-label,
+input:not(:placeholder-shown) + .floating-label {
+    top: 0;
+    font-size: 14px;
+    color: #000;
+}
+
+/* ===============================
+  BOTÃO "JOIN US"
+================================*/
+.join_us {
+    font-family: 'Libre Baskerville', serif;
+    font-weight: bold;
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 30px;
+    padding: 0;
+    margin-bottom: 20px;
+    display: block;
+    color: #000;
+    text-decoration: none;
+    transition: all 0.3s ease-in-out;
+    letter-spacing: 1px;
+}
+ 
+.join_us:hover {
+    color: #444;
+    letter-spacing: 2px;
+}
+ 
+/* ===============================
+  LINK "CRIAR CONTA"
+================================*/
+.create {
+    font-family: 'Libre Baskerville', serif;
+    text-decoration: none;
+    color: #000;
+    font-size: 16px;
+    letter-spacing: 3px;
+    transition: all 0.3s ease-in-out;
+    position: relative;
+    display: inline-block;
+    margin-top: 10px;
+}
+ 
+.create:hover {
+    color: #444;
+}
+ 
+.create::after {
+    content: '';
+    position: absolute;
+    width: 0;
+    height: 1.5px;
+    bottom: -4px;
+    left: 0;
+    background-color: #444;
+    transition: width 0.4s ease-in-out;
+}
+ 
+.create:hover::after {
+    width: 100%;
+}
+ 
+/* Container dos elementos */
+.join {
+    margin-top: 40px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+}
